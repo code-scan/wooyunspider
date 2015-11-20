@@ -20,7 +20,8 @@ class getpage(threading.Thread):
 				getpapaer(i[0])
 				#print "%s<c>%s"%(i[0],i[1])
 				print "[!]Size: ",self.inqueue.qsize()
-		except:
+		except Exception,ex:
+			print ex
 			pass
 	def run(self):
 		while True:
@@ -28,7 +29,8 @@ class getpage(threading.Thread):
 				line=self.queue.get(block=False,timeout=1)
 				if line:
 					self.get(line)
-			except:
+			except Exception,ex:
+				print ex
 				break
 
 th=Queue.Queue()
@@ -36,13 +38,8 @@ res=Queue.Queue()
 for i in xrange(3832):
 	th.put(i)
 x=[]	
-for t in xrange(25):
-	f=getpage(th,res)
-	x.append(f)
-for q in x:
-	q.start()
-for q in x:
-	q.join()
+for t in xrange(100):
+	getpage(th,res).start()
 
 	
 	
