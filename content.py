@@ -2,6 +2,7 @@
 import threading
 import urllib2
 import re
+import urllib
 import Queue
 def getpapaer(strs):
 	wybug_title="<h3 class='wybug_title'>(.*)</h3>"
@@ -13,7 +14,12 @@ def getpapaer(strs):
 	wybug_level="<h3 class='wybug_level'>(.*)</h3>"
 	wybug_cotents="<div class='wybug_detail'>([\s\S]*?)<h3 class=\"detailTitle\">修复方案：</h3>"
 	#print "http://wooyun.org%s"%strs
-	data=urllib2.urlopen("http://wooyun.org%s"%strs).read()
+	values={'Cookie':"you cookie"}
+	data = urllib.urlencode(values) 
+	url="http://wooyun.org%s"%strs
+	req = urllib2.Request(url, data) 
+	data = urllib2.urlopen(req).read()
+	#data=urllib2.urlopen("http://wooyun.org%s"%strs).read()
 	wybug_title= re.findall(wybug_title,data)[0].split("：		")[1].replace('	','')
 	wybug_corp= re.findall(wybug_corp,data)[0]
 	wybug_author= re.findall(wybug_author,data)[0]
